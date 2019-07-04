@@ -10,6 +10,14 @@ public class Prediction_dynamicRSSI {
     private float[][]storage=new float[WINDOW][SensorNumber];
     private int[] buffer=new int[20];
     private int outputs=0;
+    private int []trendBuffer=new int [30];
+
+    public int GoDownTrend(){
+        trendBuffer
+
+
+        return 0;
+    }
     public int getPredict() {
 
         if (getMax(storage)>7 && storage[0][0]-storage[WINDOW-1][0]<-10)
@@ -30,28 +38,30 @@ public class Prediction_dynamicRSSI {
     }
 
 
-    public void Storage(Node[] Nodes){
-        for (int i=0;i<WINDOW-1;i++){
-            for(int j=0;j<SensorNumber;j++)
-                storage[i][j]=storage[i+1][j];
+    public void Storage(Node[] Nodes)
+    {
+            for (int i=0;i<WINDOW-1;i++){
+                for(int j=0;j<SensorNumber;j++)
+                    storage[i][j]=storage[i+1][j];
+            }
+            //find minimal value of anchor
+            float []arr=new float[9];
+            for (int i=0;i<9;i++){
+                arr[i]=(float)(Nodes[i+1].RSSI_max);
+            }
+            //float []arr={10,59,43,59,66,33};
+            float [] arr_sort=bubbleSort01(arr);
+
+            storage[WINDOW-1][0]=(float)arr_sort[0];
+            storage[WINDOW-1][1]=(float)storage[WINDOW-1][0]-storage[WINDOW-2][0];
+
+
+            for (int i=0;i<SensorNumber;i++){
+                storage[WINDOW-1][i]=storage[WINDOW-1][i];
+
+            }
         }
-        //find minimal value of anchor
-        float []arr=new float[9];
-        for (int i=0;i<9;i++){
-            arr[i]=(float)(Nodes[i+1].RSSI_max);
-        }
-        //float []arr={10,59,43,59,66,33};
-        float [] arr_sort=bubbleSort01(arr);
 
-        storage[WINDOW-1][0]=(float)arr_sort[0];
-        storage[WINDOW-1][1]=(float)storage[WINDOW-1][0]-storage[WINDOW-2][0];
-
-
-        for (int i=0;i<SensorNumber;i++){
-            storage[WINDOW-1][i]=storage[WINDOW-1][i];
-
-        }
-    }
 
     //sort the array, from minimal to maximal
     public static float[] bubbleSort01(float[]arr) {
@@ -99,5 +109,20 @@ public class Prediction_dynamicRSSI {
         arrnew[1]=maxIndex;
 
         return arrnew[0];
+    }
+    public static int getSum(float[][]storage){
+        float []arr=new float[WINDOW];
+        for (int i = 0;i<WINDOW;i++){
+            arr[i]=storage[i][1];
+        }
+
+        if(arr==null||arr.length==0){
+            return 0;//如果数组为空 或者是长度为0 就返回null
+        }
+        int sum=0;
+        for(int i =0;i<arr.length-1;i++){
+            sum=sum+(int)arr[i];
+            }
+        return sum;
     }
 }
