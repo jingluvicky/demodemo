@@ -97,7 +97,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     public KalmanFilter_A_max[] Kalman = new KalmanFilter_A_max[13];
     public KalmanFilter_distance distanceFilter=new KalmanFilter_distance();
     public KalmanFilter Kalman_main = new KalmanFilter();
-    public static int curMotion=255,curZone=5,curZoneDebounced,curLeftRight=255,curPocketState,dynamic=0;
+    public static int curMotion=255,curZone=5,curZoneDebounced,curLeftRight=255,curPocketState,dynamic=0,trend=0;
     public static float[] curMotionOutput;
     public int CMDCounter,CMDValue,
             DECISIONTYPE,MOTIONEABLE,
@@ -507,7 +507,9 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
 
                 curZoneDebounced=zoneDebounce.DebouncedZone(curZone);
                 preDynamic.Storage(Nodes);
+
                 dynamic=preDynamic.getPredict();
+                trend=preDynamic.getTrend();
 
                 Log.d("dynamic",dynamic+" ");
 

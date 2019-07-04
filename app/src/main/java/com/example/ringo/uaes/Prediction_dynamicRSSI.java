@@ -5,18 +5,29 @@ import android.util.Log;
 public class Prediction_dynamicRSSI {
 
     private static final int WINDOW = 20;
-    private static final int BUFFERWINDOW=20;
+    private static final int BUFFERWINDOW=20,TRENDWINDOW=30;
     private static final int SensorNumber=3;
     private float[][]storage=new float[WINDOW][SensorNumber];
     private int[] buffer=new int[20];
-    private int outputs=0;
-    private int []trendBuffer=new int [30];
+    private int outputs=0,lastValue=0,curValue;
 
-    public int GoDownTrend(){
-        trendBuffer
+    private int []trendBuffer=new int [TRENDWINDOW];
 
-
-        return 0;
+    public int getTrend(){
+        for (int i=0;i<TRENDWINDOW-1;i++){
+                trendBuffer[i]=trendBuffer[i+1];
+        }
+        curValue=getSum(storage);
+        if (curValue-lastValue>0)
+            trendBuffer[TRENDWINDOW-1]=curValue-lastValue;
+        else trendBuffer[TRENDWINDOW-1]=0;
+        int sum=0;
+        for (int i=0;i<TRENDWINDOW-1;i++){
+            sum=sum+trendBuffer[i];
+        }
+        if (sum<100)
+        return 1;
+        else return 0;
     }
     public int getPredict() {
 

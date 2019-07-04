@@ -48,7 +48,7 @@ public class MainTabLocationFragment extends Fragment {
     private static int motion;
     public static boolean isRecord;
     private boolean[] switches = new boolean[8];
-    private static ImageView img_walk,img_pocket,img_lock,img_dynamic;
+    private static ImageView img_walk,img_pocket,img_lock,img_dynamic,img_trend;
     private static ImageView img_connect;
     private static TextView txt_unlockdis,txt_lockdis,txt_zone;
     private static Button btn_left,btn_right,btn_front,btn_rear,btn_unlockminus,btn_unlockplus,btn_lockminus,btn_lockplus;
@@ -181,6 +181,7 @@ public class MainTabLocationFragment extends Fragment {
         img_connect=getActivity().findViewById(R.id.img_connectlocation);
         img_lock=getActivity().findViewById(R.id.img_lock);
         img_dynamic=getActivity().findViewById(R.id.img_dynamic);
+        img_trend=getActivity().findViewById(R.id.img_trend);
         mHandler=new Handler();
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -242,9 +243,14 @@ public class MainTabLocationFragment extends Fragment {
                         img_lock.setImageResource(R.mipmap.redicon2);
                     }
                     if (dynamic==1){
-                        img_dynamic.setImageResource(R.mipmap.bronze_member);
+                        img_dynamic.setImageResource(R.mipmap.greenicon);
                     }else{
-                        img_dynamic.setImageResource(R.mipmap.silver_member);
+                        img_dynamic.setImageResource(R.mipmap.redicon2);
+                    }
+                    if (MainTabScanFragment.trend==1){
+                        img_trend.setImageResource(R.mipmap.redicon2);
+                    }else{
+                        img_trend.setImageResource(R.mipmap.greenicon);
                     }
 
                 }
