@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="ZONEBUFFER">5</integer>  <!--duration before zone switch-->
+    <integer name="DECISIONTYPE">2</integer>  <!-- 1: tensorflow 2: lookup table-->
+    <integer name="CARCONFIGTYPE">1</integer>  <!-- 1: TOP 2: MEDIUM-->
+
+    <integer name="DEBOUNCEDBUFFER1to3">20</integer>  <!--duration before lock state switch-->
+    <integer name="DEBOUNCEDBUFFER1toi">2</integer>  <!--duration before lock state switch-->
+    <integer name="DEBOUNCEDBUFFER3to1">2</integer>  <!--duration before lock state switch-->
+
+    <integer name="UNLOCKDISTANCE">15</integer>  <!---->
+    <integer name="LOCKDISTANCE">30</integer>  <!---->
+    <integer name="MOTIONENABLE">1</integer>  <!--1: motion enabled 2: motion disabled-->
+
+
+</resources>

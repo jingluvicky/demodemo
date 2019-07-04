@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:orientation="vertical"
+    tools:context="com.example.ringo.uaes.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="165dp"
+            android:layout_gravity="center_horizontal|fill_horizontal"
+            android:foregroundGravity="center_vertical"
+            app:srcCompat="@mipmap/niobg" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12"
+        android:background="@color/colorAccent"
+        android:orientation="horizontal">
+
+        <!--Used to contain the buttons-->
+        <LinearLayout
+
+            android:layout_width="277dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="#ffffff"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/btn_Lock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:src="@mipmap/lock" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@android:color/background_light" />
+
+                <ImageView
+                    android:id="@+id/btn_UnLock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@mipmap/unlock" />
+
+                <ImageView
+                    android:id="@+id/btn_Panic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    android:layout_weight="1"
+                    android:src="@mipmap/panic" />
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@android:color/background_light" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btn_trunkunlock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:src="@mipmap/trunkunlock" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <!--Used to contain the seekbar-->
+
+
+</LinearLayout>

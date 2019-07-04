@@ -1,0 +1,31 @@
+
+{
+	"buildFiles" : 
+	[
+		"/home/be_eni/AndroidStudioProjects/1219_NewAndroidProject/B11B_pocketidentify_shareversion/app/CMakeLists.txt"
+	],
+	"cleanCommands" : 
+	[
+		"/home/be_eni/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /home/be_eni/AndroidStudioProjects/1219_NewAndroidProject/B11B_pocketidentify_shareversion/app/.externalNativeBuild/cmake/release/armeabi-v7a --target clean"
+	],
+	"libraries" : 
+	{
+		"native-lib-Release-armeabi-v7a" : 
+		{
+			"abi" : "armeabi-v7a",
+			"artifactName" : "native-lib",
+			"buildCommand" : "/home/be_eni/Android/Sdk/cmake/3.6.4111459/bin/cmake --build /home/be_eni/AndroidStudioProjects/1219_NewAndroidProject/B11B_pocketidentify_shareversion/app/.externalNativeBuild/cmake/release/armeabi-v7a --target native-lib",
+			"buildType" : "release",
+			"output" : "/home/be_eni/AndroidStudioProjects/1219_NewAndroidProject/B11B_pocketidentify_shareversion/app/build/intermediates/cmake/release/obj/armeabi-v7a/libnative-lib.so",
+			"toolchain" : "513160558207928958"
+		}
+	},
+	"toolchains" : 
+	{
+		"513160558207928958" : 
+		{
+			"cCompilerExecutable" : "/home/be_eni/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/clang",
+			"cppCompilerExecutable" : "/home/be_eni/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++"
+		}
+	}
+}

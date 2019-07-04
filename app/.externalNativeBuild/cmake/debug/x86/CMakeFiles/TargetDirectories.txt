@@ -1,0 +1,3 @@
+/home/be_eni/AndroidStudioProjects/1219_NewAndroidProject/B11B_pocketidentify_shareversion/app/.externalNativeBuild/cmake/debug/x86/CMakeFiles/rebuild_cache.dir
+/home/be_eni/AndroidStudioProjects/1219_NewAndroidProject/B11B_pocketidentify_shareversion/app/.externalNativeBuild/cmake/debug/x86/CMakeFiles/edit_cache.dir
+/home/be_eni/AndroidStudioProjects/1219_NewAndroidProject/B11B_pocketidentify_shareversion/app/.externalNativeBuild/cmake/debug/x86/CMakeFiles/native-lib.dir
