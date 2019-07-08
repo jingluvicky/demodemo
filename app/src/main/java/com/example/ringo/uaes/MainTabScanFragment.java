@@ -79,6 +79,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     Prediction_dynamicRSSI preDynamic;
     PredictionTF_frontandrear preTF_front;
     PredictionTF_motion preTF_motion;
+    PredictionTF_trend preTF_trend;
     LUTprediction_top luTpredictionTop =new LUTprediction_top(); //Lookup table
     ZoneDebounce zoneDebounce=new ZoneDebounce();
 
@@ -183,6 +184,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
         preTF_zone_medium=new PredictionTF_zone0618_medium(this.getContext().getAssets());
 //        preTF_zone_medium_pocket=new PredictionTF_zone0618_medium_pocket(this.getContext().getAssets());
         preTF_motion=new PredictionTF_motion(this.getContext().getAssets());
+        preTF_trend=new PredictionTF_trend(this.getContext().getAssets());
         txt_RSSI=getActivity().findViewById(R.id.txt_RSSI);
         txt_curMotion = getActivity().findViewById(R.id.txt_curMotion);
         txt_curZone = getActivity().findViewById(R.id.txt_curZone);
@@ -455,7 +457,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 initNode();
                 // 1. perform the tensorflow model
                 // 2. perform Lookup table
-
+                preTF_trend.Storage(Nodes);
                 switch(DECISIONTYPE){
                     case 1:
                         float[] outputs=new float[1];
@@ -476,7 +478,6 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                                 }
 
                                 break;
-
 
                             default:
                                 outputs[0]=0;
@@ -509,7 +510,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 preDynamic.Storage(Nodes);
 
                 dynamic=preDynamic.getPredict();
-                trend=preDynamic.getTrend();
+                trend=preDynamic.getTrend(Nodes);
 
                 Log.d("dynamic",dynamic+" ");
 

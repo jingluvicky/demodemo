@@ -50,7 +50,7 @@ public class MainTabLocationFragment extends Fragment {
     private boolean[] switches = new boolean[8];
     private static ImageView img_walk,img_pocket,img_lock,img_dynamic,img_trend;
     private static ImageView img_connect;
-    private static TextView txt_unlockdis,txt_lockdis,txt_zone;
+    private static TextView txt_unlockdis,txt_lockdis,txt_zone,txt_trend;
     private static Button btn_left,btn_right,btn_front,btn_rear,btn_unlockminus,btn_unlockplus,btn_lockminus,btn_lockplus;
     public static int uwbZone=0;
     public static int lockDis=25,unlockDis=15;
@@ -81,7 +81,7 @@ public class MainTabLocationFragment extends Fragment {
         txt_lockdis=getActivity().findViewById(R.id.txt_lockDis);
         txt_unlockdis=getActivity().findViewById(R.id.txt_unlockDis);
         txt_zone=getActivity().findViewById(R.id.txt_zone);
-
+        txt_trend=getActivity().findViewById(R.id.txt_trend);
         btn_lockminus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,21 +247,18 @@ public class MainTabLocationFragment extends Fragment {
                     }else{
                         img_dynamic.setImageResource(R.mipmap.redicon2);
                     }
-                    if (MainTabScanFragment.trend==1){
+                    if (MainTabScanFragment.trend>10){
                         img_trend.setImageResource(R.mipmap.redicon2);
                     }else{
                         img_trend.setImageResource(R.mipmap.greenicon);
                     }
-
+                    txt_trend.setText(""+MainTabScanFragment.trend);
                 }
                 txt_zone.setText("Current Zone:" + MainTabScanFragment.distance+"\n"+MainTabScanFragment.curZone+"\n"+MainTabScanFragment.curZoneDebounced);
-
 
                 mHandler.postDelayed(this,20);
             }
         }, 20);
-
-
 
         super.onActivityCreated(savedInstanceState);
 

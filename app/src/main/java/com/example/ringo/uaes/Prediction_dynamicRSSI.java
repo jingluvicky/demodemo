@@ -5,29 +5,38 @@ import android.util.Log;
 public class Prediction_dynamicRSSI {
 
     private static final int WINDOW = 20;
-    private static final int BUFFERWINDOW=20,TRENDWINDOW=30;
+    private static final int BUFFERWINDOW=20,TRENDWINDOW=10;
     private static final int SensorNumber=3;
     private float[][]storage=new float[WINDOW][SensorNumber];
     private int[] buffer=new int[20];
-    private int outputs=0,lastValue=0,curValue;
+    private int outputs=0;
+    private float lastValue=0,curValue;
+    private float[]arr_sort;
+    private int [][]trendBuffer=new int [TRENDWINDOW][2];
 
-    private int []trendBuffer=new int [TRENDWINDOW];
-
-    public int getTrend(){
+    public int getTrend(Node[]Nodes){
         for (int i=0;i<TRENDWINDOW-1;i++){
-                trendBuffer[i]=trendBuffer[i+1];
+            for(int j=0;j<2;j++)
+                trendBuffer[i][j]=trendBuffer[i+1][j];
         }
-        curValue=getSum(storage);
-        if (curValue-lastValue>0)
-            trendBuffer[TRENDWINDOW-1]=curValue-lastValue;
-        else trendBuffer[TRENDWINDOW-1]=0;
+        curValue=getSum(arr_sort);
+        Log.d("curvalue",(curValue-lastValue)+" "+curValue);
+        float temp=curValue-lastValue;
+        //if (curValue-lastValue>2 && curValue-lastValue<10)
+            trendBuffer[TRENDWINDOW-1][0]=(int)curValue;//curValue-lastValue;
+        //else trendBuffer[TRENDWINDOW-1]=0;
+        trendBuffer[TRENDWINDOW-1][1]=trendBuffer[TRENDWINDOW-1][0]-trendBuffer[0][0];
+        lastValue=curValue;
         int sum=0;
         for (int i=0;i<TRENDWINDOW-1;i++){
-            sum=sum+trendBuffer[i];
+            if (trendBuffer[i][1]<50)
+            sum=sum+trendBuffer[i][1];
         }
-        if (sum<100)
-        return 1;
-        else return 0;
+        Log.d("sum",sum+" ");
+        return (int)sum/TRENDWINDOW;//sum;
+        //if (sum>TRENDWINDOW/3)
+        //return 1;
+        //else return 0;
     }
     public int getPredict() {
 
@@ -61,11 +70,10 @@ public class Prediction_dynamicRSSI {
                 arr[i]=(float)(Nodes[i+1].RSSI_max);
             }
             //float []arr={10,59,43,59,66,33};
-            float [] arr_sort=bubbleSort01(arr);
+             arr_sort=bubbleSort01(arr);
 
             storage[WINDOW-1][0]=(float)arr_sort[0];
             storage[WINDOW-1][1]=(float)storage[WINDOW-1][0]-storage[WINDOW-2][0];
-
 
             for (int i=0;i<SensorNumber;i++){
                 storage[WINDOW-1][i]=storage[WINDOW-1][i];
@@ -85,7 +93,7 @@ public class Prediction_dynamicRSSI {
         int size = nodeRSSI.length; // 数组大小
         for (int i = 0; i < size - 1; i++) {
             for (int j = i + 1; j < size; j++) {
-                if (nodeRSSI[i] > nodeRSSI[j]) { // 交换两数的位置
+                if (nodeRSSI[i] > nodeRSSI[j]) { //交换两数的位置
                     tempNumber=i;
                     temp = nodeRSSI[i];
                     nodeRSSI[i] = nodeRSSI[j];
@@ -115,24 +123,16 @@ public class Prediction_dynamicRSSI {
                 maxIndex=i+1;
             }
         }
-
         arrnew[0]=(int)arr[maxIndex];
         arrnew[1]=maxIndex;
 
         return arrnew[0];
     }
-    public static int getSum(float[][]storage){
-        float []arr=new float[WINDOW];
-        for (int i = 0;i<WINDOW;i++){
-            arr[i]=storage[i][1];
-        }
+    public static float getSum(float[]arr_sort){
 
-        if(arr==null||arr.length==0){
-            return 0;//如果数组为空 或者是长度为0 就返回null
-        }
-        int sum=0;
-        for(int i =0;i<arr.length-1;i++){
-            sum=sum+(int)arr[i];
+        float sum=0;
+        for(int i =0;i<3;i++){
+            sum=sum+arr_sort[i];
             }
         return sum;
     }
