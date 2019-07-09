@@ -17,10 +17,10 @@ public class PredictionTF_trend {
     private static final int SENSORNUMBER=7;
 
     //模型中输入变量的名称
-    private static final String inputName = "lstm_17_input";
+    private static final String inputName = "lstm_1_input";
     //模型中输出变量的名称
     private static final String outputName = "output_0";
-    private static final String modePath="file:///android_asset/0708.pb";
+    private static final String modePath="file:///android_asset/LSTM_0708_distance.pb";
     TensorFlowInferenceInterface inferenceInterface;
 
 
@@ -85,6 +85,8 @@ public class PredictionTF_trend {
         for(int i=0;i<7;i++){
             storage[WINDOW-1][i]=(int)nodes[i].RSSI_filtered/100;
         }
+
+
     }
     public void clearAll(){
         storage=new float[WINDOW][SENSORNUMBER];
