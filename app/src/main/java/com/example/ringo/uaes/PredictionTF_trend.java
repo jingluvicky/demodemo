@@ -20,7 +20,7 @@ public class PredictionTF_trend {
     private static final String inputName = "lstm_17_input";
     //模型中输出变量的名称
     private static final String outputName = "output_0";
-    private static final String modePath="file:///android_asset/LSTM0708.pb";
+    private static final String modePath="file:///android_asset/0708.pb";
     TensorFlowInferenceInterface inferenceInterface;
 
 
@@ -61,8 +61,8 @@ public class PredictionTF_trend {
                 inputdata2[j*SENSORNUMBER+i]=(storage[j][i]);
             }
         }
-        float[] outputs = new float[3];
-        if (storage[50][0]!=0) {
+        float[] outputs = new float[1];
+
             //将数据feed给tensorflow的输入节点
             inferenceInterface.feed(inputName, inputdata2, 1, WINDOW, SENSORNUMBER);
             //运行tensorflow
@@ -71,25 +71,8 @@ public class PredictionTF_trend {
             ///获取输出节点的输出信息
             //用于存储模型的输出数据
             inferenceInterface.fetch(outputName, outputs);
-        }else {
-            outputs[0]=0;outputs[1]=0;outputs[2]=0;
-        }
+            Log.d("trend11",outputs[0]+" ");
 
-        float tempMax = -10;
-        int tempMaxNumber = 0;
-        for (int i = 0; i < 3; i++) {
-            if (outputs[i] > tempMax) {
-                tempMax = outputs[i];
-                tempMaxNumber = i;
-            }
-        }
-        tempMaxNumber = tempMaxNumber + 1;
-
-        if (tempMaxNumber == 2 && outputs[1] > 2) {
-            return tempMaxNumber;
-        } else if (tempMaxNumber != 2) {
-            return tempMaxNumber;
-        }
         return 0;
     }
 
@@ -98,11 +81,9 @@ public class PredictionTF_trend {
         for (int i=0;i<WINDOW-1;i++){
             for(int j=0;j<SENSORNUMBER;j++)
                 storage[i][j]=storage[i+1][j];
-
-
         }
         for(int i=0;i<7;i++){
-            storage[WINDOW-1][i]=(int)nodes[i].RSSI_filtered;
+            storage[WINDOW-1][i]=(int)nodes[i].RSSI_filtered/100;
         }
     }
     public void clearAll(){
@@ -110,8 +91,6 @@ public class PredictionTF_trend {
         for (int i=0;i<WINDOW;i++){
             for(int j=0;j<SENSORNUMBER;j++)
                 storage[i][j]=0;
-
-
         }
     }
 

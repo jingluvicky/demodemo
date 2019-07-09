@@ -458,6 +458,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 // 1. perform the tensorflow model
                 // 2. perform Lookup table
                 preTF_trend.Storage(Nodes);
+                int a=preTF_trend.getPredict();
                 switch(DECISIONTYPE){
                     case 1:
                         float[] outputs=new float[1];
