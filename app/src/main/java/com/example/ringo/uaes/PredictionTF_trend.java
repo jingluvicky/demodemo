@@ -44,7 +44,7 @@ public class PredictionTF_trend {
      *
      * @return 返回预测结果，int数组
      */
-    public int getPredict() {
+    public float getPredict() {
         //  float[] inputdata = bitmapToFloatArray(bitmap,128,1);//需要将图片缩放带28*28
         //float[][] inputdata1=new float [128][1];
         //inputdata1[1]
@@ -73,7 +73,7 @@ public class PredictionTF_trend {
             inferenceInterface.fetch(outputName, outputs);
             Log.d("trend11",outputs[0]+" ");
 
-        return 0;
+        return outputs[0];
     }
 
     public void Storage(Node[]nodes){

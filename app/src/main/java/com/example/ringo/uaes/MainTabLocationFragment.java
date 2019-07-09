@@ -252,7 +252,7 @@ public class MainTabLocationFragment extends Fragment {
                     }else{
                         img_trend.setImageResource(R.mipmap.greenicon);
                     }
-                    txt_trend.setText(""+MainTabScanFragment.trend);
+                    txt_trend.setText(MainTabScanFragment.trend+" ");
                 }
                 txt_zone.setText("Current Zone:" + MainTabScanFragment.distance+"\n"+MainTabScanFragment.curZone+"\n"+MainTabScanFragment.curZoneDebounced);
 
