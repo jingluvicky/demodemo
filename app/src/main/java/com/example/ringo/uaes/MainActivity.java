@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,s
     private MainTabShareFragment fragment2;
     private MainTabScanFragment fragment3;
     private MainTabLocationFragment fragment4;
-
+    private MainTabLocationoutputFragment fragment5;
     private static TextView versionNumber;
     private static final String MODEL_FILE = "file:///android_asset/HARModel.pb"; //模型存放路径
 
@@ -128,14 +128,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,s
     private void initView() {
         currentTabIndex = 0;
         //getActionBar().setTitle(Str_TabControl);
-        mainTabs = new ImageView[4];
+        mainTabs = new ImageView[5];
 
 
         mainTabs[0] = (ImageView) findViewById(R.id.btn_tabcontrol);
         mainTabs[1] = (ImageView) findViewById(R.id.btn_tabshare);
         mainTabs[2] = (ImageView) findViewById(R.id.btn_tabble);
         mainTabs[3] = (ImageView) findViewById(R.id.btn_location);
-
+        mainTabs[4]=(ImageView)findViewById(R.id.btn_locationoutput );
 
         //userButtons[0].setOnClickListener(this);
        // userButtons[1].setOnClickListener(this);
@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,s
         mainTabs[1].setOnClickListener(this);
         mainTabs[2].setOnClickListener(this);
         mainTabs[3].setOnClickListener(this);
+        mainTabs[4].setOnClickListener(this);
         mainTabs[0].setImageResource(R.mipmap.control_b);
 
 
@@ -152,15 +153,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener,s
         fragment2 = new MainTabShareFragment();
         fragment3 = new MainTabScanFragment();
         fragment4 = new MainTabLocationFragment();
+        fragment5=new MainTabLocationoutputFragment();
 
-
-        fragments = new Fragment[]{fragment1, fragment2, fragment3, fragment4};
+        fragments = new Fragment[]{fragment1, fragment2, fragment3, fragment4,fragment5};
         getFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, fragments[0])
                 .add(R.id.fragment_container, fragments[1])
                 .add(R.id.fragment_container, fragments[2])
                 .add(R.id.fragment_container, fragments[3])
-                .hide(fragments[1]).hide(fragments[2]).hide(fragments[3])
+                .add(R.id.fragment_container,fragments[4])
+                .hide(fragments[1]).hide(fragments[2]).hide(fragments[3]).hide(fragments[4])
                 .show(fragments[0]).commit();
         Log.v("Start","Enabled");
 
@@ -177,7 +179,8 @@ private void refreshTabIcon(){
     mainTabs[0].setImageResource(R.mipmap.control);
     mainTabs[1].setImageResource(R.mipmap.share);
     mainTabs[2].setImageResource(R.mipmap.beacon);
-    mainTabs[3].setImageResource(R.mipmap.location);
+    mainTabs[3].setImageResource(R.mipmap.setting_gray);
+    mainTabs[4].setImageResource(R.mipmap.location_gray);
 
 }
 
@@ -266,7 +269,14 @@ private void refreshTabIcon(){
             case R.id.btn_location:
                 index = 3;
                 refreshTabIcon();
-                mainTabs[3].setImageResource(R.mipmap.location_b);
+                mainTabs[3].setImageResource(R.mipmap.setting);
+                Log.v("ZYL debug", "Tab Control Clicked");
+                //getActionBar().setTitle(Str_TabControl);
+                break;
+            case R.id.btn_locationoutput:
+                index = 4;
+                refreshTabIcon();
+                mainTabs[4].setImageResource(R.mipmap.location);
                 Log.v("ZYL debug", "Tab Control Clicked");
                 //getActionBar().setTitle(Str_TabControl);
                 break;

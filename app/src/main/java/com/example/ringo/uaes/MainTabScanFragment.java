@@ -98,7 +98,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     public KalmanFilter_A_max[] Kalman = new KalmanFilter_A_max[13];
     public KalmanFilter_distance distanceFilter=new KalmanFilter_distance();
     public KalmanFilter Kalman_main = new KalmanFilter();
-    public static int curMotion=255,curZone=5,curZoneDebounced,curLeftRight=255,curPocketState,dynamic=0,trend=0;
+    public static int curMotion=255,curZone=255,curZoneDebounced,curLeftRight=255,curPocketState,dynamic=0,trend=0,awakeState=0;
     public static float[] curMotionOutput;
     public int CMDCounter,CMDValue,
             DECISIONTYPE,MOTIONEABLE,
@@ -131,7 +131,6 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                         "A10:  " + (int) Nodes[10].RSSI_filtered + "\n" +
                         "A11:  " + (int) Nodes[11].RSSI_filtered + "\n"
                 );
-
                 // display motion outputs
                 if (curMotionOutput!=null) {
                     if (curMotion==2){
@@ -143,8 +142,6 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 }
                 // display zone outputs
                 txt_curZone.setText("Current Zone:" + distance+"\n"+curZone);
-
-
             }
             if (isScan) {
                 img_scan.setImageResource(R.mipmap.greenicon);
@@ -218,7 +215,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                         motionRecognizeThread = new Thread(runnableMotionRecognize);
                         zoneRecognizeThread = new Thread(runnableZoneRecognize);
                         motionRecognizeThread.start();
-                        zoneRecognizeThread.start();
+                        //zoneRecognizeThread.start();
                     } else {
                         exit = true;
                         toConnect = false;
@@ -230,8 +227,6 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                             curZone = 255;
                             curLeftRight = 255;
                         }
-
-
                         Log.d(TAG, "Disconnect");
                        // mbluetoothAdapter.getBluetoothLeAdvertiser().stopAdvertising(mAdvertiseCallback);
                         Log.d(TAG, "Stop advertising");
@@ -303,9 +298,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                             writeThread = new Thread(runnableWriteCharac);
                             writeThread.start();
                             //handlerWrite.postDelayed(runnableWriteCharac,50);
-
                         }
-
                     }
 
                     @Override
@@ -453,66 +446,79 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
 
     private Runnable runnableZoneRecognize=new Runnable() {
         public void run() {
-            while(toConnect) {
+            while(isConnect) { //连接后开始定位
+                curZone=6; //状态为连接态
                 initNode();
-                // 1. perform the tensorflow model
-                // 2. perform Lookup table
-                preTF_trend.Storage(Nodes);
-                float a=preTF_trend.getPredict();
-                switch(DECISIONTYPE){
-                    case 1:
-                        float[] outputs=new float[1];
-                        switch (CARCONFIGTYPE){
-                            case 1:
-                                preTF_zone.Storage(Nodes);
-                                 outputs = preTF_zone.getPredict();
-                                if (distanceFilter==null) distanceFilter=new KalmanFilter_distance();
-
-                                break;
-                            case 2:
-                                if(curPocketState==1){
-                                    preTF_zone_medium_pocket.Storage(Nodes);
-                                    outputs=preTF_zone_medium_pocket.getPredict();
-                                }else{
-                                    preTF_zone_medium.Storage(Nodes);
-                                    outputs=preTF_zone_medium.getPredict();
-                                }
-
-                                break;
-
-                            default:
-                                outputs[0]=0;
-                                break;
-
-                        }
-                        outputs[0]=(float)distanceFilter.FilteredRSSI(outputs[0],true);
-
-                        distance=outputs[0];
-                        if (distance<(float)MainTabLocationFragment.unlockDis/10)
-                            curZone=1;
-                        else if (distance>(float)MainTabLocationFragment.lockDis/10)
-                            curZone=3;
-                        else curZone=2;
-                        if (Nodes[0].RSSI_filtered<60)curZone=1;
-                        int temp= luTpredictionTop.PEPS_s32CaliFunction(Nodes);
-                        if (temp==0)
-                            curZone=0;
-                        break;
-                    case 2:
-                        switch (CARCONFIGTYPE){
-                            case(1):
-
-                        }
-                        curZone= luTpredictionTop.PEPS_s32CaliFunction(Nodes);
-                        break;
+                if (awakeState == 0) {//判断是否唤醒节点
+                    if( Nodes[0].RSSI_filtered<80 ){
+                        curZone=5;
+                        awakeState=1;
+                    }
                 }
 
+                if (awakeState==1) {//唤醒态可判断位置
+                    //利用定位算法判断位置
+                    //region
+                    // 1. perform the tensorflow model
+                    // 2. perform Lookup table
+                    preTF_trend.Storage(Nodes);
+                    float a = preTF_trend.getPredict();
+                    switch (DECISIONTYPE) {
+                        case 1:
+                            float[] outputs = new float[1];
+                            switch (CARCONFIGTYPE) {
+                                case 1:
+                                    preTF_zone.Storage(Nodes);
+                                    outputs = preTF_zone.getPredict();
+                                    if (distanceFilter == null)
+                                        distanceFilter = new KalmanFilter_distance();
+
+                                    break;
+                                case 2:
+                                    if (curPocketState == 1) {
+                                        preTF_zone_medium_pocket.Storage(Nodes);
+                                        outputs = preTF_zone_medium_pocket.getPredict();
+                                    } else {
+                                        preTF_zone_medium.Storage(Nodes);
+                                        outputs = preTF_zone_medium.getPredict();
+                                    }
+
+                                    break;
+
+                                default:
+                                    outputs[0] = 0;
+                                    break;
+
+                            }
+                            outputs[0] = (float) distanceFilter.FilteredRSSI(outputs[0], true);
+
+                            distance = outputs[0];
+                            if (distance < (float) MainTabLocationFragment.unlockDis / 10)
+                                curZone = 1;
+                            else if (distance > (float) MainTabLocationFragment.lockDis / 10)
+                                curZone = 3;
+                            else curZone = 2;
+                            if (Nodes[0].RSSI_filtered < 60) curZone = 1;
+                            int temp = luTpredictionTop.PEPS_s32CaliFunction(Nodes);
+                            if (temp == 0)
+                                curZone = 0;
+                            break;
+                        case 2:
+                            switch (CARCONFIGTYPE) {
+                                case (1):
+
+                            }
+                            curZone = luTpredictionTop.PEPS_s32CaliFunction(Nodes);
+                            break;
+                    }
+                    //endregion
+                }
                 curZoneDebounced=zoneDebounce.DebouncedZone(curZone);
                 preDynamic.Storage(Nodes);
 
                 dynamic=preDynamic.getPredict();
                 trend=preDynamic.getTrend(Nodes);
-                trend=(int)(a*500);
+                //trend=(int)(a*500);
                 Log.d("dynamic",dynamic+" ");
 
                 try {

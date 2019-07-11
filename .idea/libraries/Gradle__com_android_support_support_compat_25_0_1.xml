@@ -1,18 +1,18 @@
 <component name="libraryTable">
   <library name="Gradle: com.android.support:support-compat-25.0.1">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.1.aar/abbb4c11033eaa2877803f10ea0af4cd/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.1.aar/37b4c0b64f18d58b301a0d3cdb66cecb/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.1.aar/abbb4c11033eaa2877803f10ea0af4cd/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.1.aar/abbb4c11033eaa2877803f10ea0af4cd/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.1.aar/abbb4c11033eaa2877803f10ea0af4cd/jars/libs/internal_impl-25.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.1.aar/37b4c0b64f18d58b301a0d3cdb66cecb/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.1.aar/37b4c0b64f18d58b301a0d3cdb66cecb/jars/libs/internal_impl-25.0.1.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/support-compat-25.0.1.aar/37b4c0b64f18d58b301a0d3cdb66cecb/res" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/AppData/Local/Android/Sdk/extras/android/m2repository/com/android/support/support-compat/25.0.1/support-compat-25.0.1-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/Android/Sdk/extras/android/m2repository/com/android/support/support-compat/25.0.1/support-compat-25.0.1-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$USER_HOME$/AppData/Local/Android/Sdk/extras/android/m2repository/com/android/support/support-compat/25.0.1/support-compat-25.0.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/Android/Sdk/extras/android/m2repository/com/android/support/support-compat/25.0.1/support-compat-25.0.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

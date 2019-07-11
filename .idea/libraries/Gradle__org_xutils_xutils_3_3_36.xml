@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: org.xutils:xutils-3.3.36">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/xutils-3.3.36.aar/f96e61f7eb26fbd29b97f6fd8fff7c4d/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/xutils-3.3.36.aar/f96e61f7eb26fbd29b97f6fd8fff7c4d/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/xutils-3.3.36.aar/b8e74b3b56c3515dde0f222244dd5ef2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/xutils-3.3.36.aar/b8e74b3b56c3515dde0f222244dd5ef2/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
