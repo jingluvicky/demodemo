@@ -42,10 +42,14 @@ public class MainTabLocationoutputFragment extends Fragment {
 
     private boolean[] switches = new boolean[8];
     private DataService.MyBinder binder;
+    private Handler mHandler;
     private static final String TAG = "MainTabLocationoutputFragment";
+    public static int X,Y;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+
+        X = 500; Y =1000;
         View view = inflater.inflate(R.layout.fragment_locationoutput, container, false);
 
         return view;
@@ -66,14 +70,24 @@ public class MainTabLocationoutputFragment extends Fragment {
 
         getActivity().bindService(bindIntent, connection, getActivity().BIND_AUTO_CREATE);
 
+
+
+        mHandler=new Handler();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                {
+                    X=MainTabScanFragment.curX;
+                    Y=MainTabScanFragment.curY;
+                    View circleview=getActivity().findViewById(R.id.circle);
+                    circleview.invalidate();
+                }
+                mHandler.postDelayed(this,20);
+            }
+        }, 20);
         super.onActivityCreated(savedInstanceState);
 
     }
-
-
-
-
-
 
     private ServiceConnection connection = new ServiceConnection() {
 

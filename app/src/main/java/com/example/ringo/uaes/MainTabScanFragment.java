@@ -74,12 +74,9 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
 
     // prediction
     PredictionTF_zone0522 preTF_zone;
-    PredictionTF_zone0618_medium preTF_zone_medium;
-    PredictionTF_zone0618_medium_pocket preTF_zone_medium_pocket;
     Prediction_dynamicRSSI preDynamic;
-    PredictionTF_frontandrear preTF_front;
     PredictionTF_motion preTF_motion;
-    PredictionTF_trend preTF_trend;
+    PredictionTF_xy preTF_xy;
     LUTprediction_top luTpredictionTop =new LUTprediction_top(); //Lookup table
     ZoneDebounce zoneDebounce=new ZoneDebounce();
 
@@ -98,7 +95,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     public KalmanFilter_A_max[] Kalman = new KalmanFilter_A_max[13];
     public KalmanFilter_distance distanceFilter=new KalmanFilter_distance();
     public KalmanFilter Kalman_main = new KalmanFilter();
-    public static int curMotion=255,curZone=255,curZoneDebounced,curLeftRight=255,curPocketState,dynamic=0,trend=0,awakeState=0;
+    public static int curMotion=255,curZone=255,curZoneDebounced,curLeftRight=255,curPocketState,dynamic=0,trend=0,awakeState=0,curX=0,curY=0;
     public static float[] curMotionOutput;
     public int CMDCounter,CMDValue,
             DECISIONTYPE,MOTIONEABLE,
@@ -176,12 +173,9 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
 
         // init layout components
         preDynamic=new Prediction_dynamicRSSI();
-        preTF_front=new PredictionTF_frontandrear(this.getContext().getAssets());
         preTF_zone=new PredictionTF_zone0522(this.getContext().getAssets());
-        preTF_zone_medium=new PredictionTF_zone0618_medium(this.getContext().getAssets());
-//        preTF_zone_medium_pocket=new PredictionTF_zone0618_medium_pocket(this.getContext().getAssets());
         preTF_motion=new PredictionTF_motion(this.getContext().getAssets());
-        preTF_trend=new PredictionTF_trend(this.getContext().getAssets());
+        preTF_xy=new PredictionTF_xy(this.getContext().getAssets());
         txt_RSSI=getActivity().findViewById(R.id.txt_RSSI);
         txt_curMotion = getActivity().findViewById(R.id.txt_curMotion);
         txt_curZone = getActivity().findViewById(R.id.txt_curZone);
@@ -457,12 +451,14 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 }
 
                 if (awakeState==1) {//唤醒态可判断位置
-                    //利用定位算法判断位置
-                    //region
+
+                    //region  利用定位算法判断位置
                     // 1. perform the tensorflow model
                     // 2. perform Lookup table
-                    preTF_trend.Storage(Nodes);
-                    float a = preTF_trend.getPredict();
+                    preTF_xy.Storage(Nodes);
+                    float []a = preTF_xy.getPredict();
+                    curX=(int)a[0]*800;
+                    curY=(int)a[1]*800;
                     switch (DECISIONTYPE) {
                         case 1:
                             float[] outputs = new float[1];
@@ -475,13 +471,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
 
                                     break;
                                 case 2:
-                                    if (curPocketState == 1) {
-                                        preTF_zone_medium_pocket.Storage(Nodes);
-                                        outputs = preTF_zone_medium_pocket.getPredict();
-                                    } else {
-                                        preTF_zone_medium.Storage(Nodes);
-                                        outputs = preTF_zone_medium.getPredict();
-                                    }
+
 
                                     break;
 
@@ -544,6 +534,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
 
     private Runnable runnableMotionRecognize=new Runnable() {
         public void run() {
+            //region motion recognize
             int counter_motion=0;
 
             while(toConnect ) {
@@ -589,6 +580,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                     e.printStackTrace();
                 }
             }
+            //endregion
         }
     };
 
