@@ -20,7 +20,7 @@ public class PredictionTF_xy {
     private static final String inputName = "lstm_1_input";
     //模型中输出变量的名称
     private static final String outputName = "output_0";
-    private static final String modePath="file:///android_asset/LSTM_0712_xy.pb";
+    private static final String modePath="file:///android_asset/LSTM_0712_polar.pb";
     TensorFlowInferenceInterface inferenceInterface;
     double A=1;
     double Q=0.05;
@@ -82,8 +82,10 @@ public class PredictionTF_xy {
         //用于存储模型的输出数据
         inferenceInterface.fetch(outputName, outputs);
         Log.d("trend11",outputs[0]+" ");
-
-        return outputs;
+        float []output=new float[2];
+        output[0]=(float)(outputs[0]*Math.cos(outputs[1])*10);
+        output[1]=(float)(outputs[0]*Math.sin(outputs[1])*10);
+        return output;
     }
 
     public void Storage(Node[]nodes){
