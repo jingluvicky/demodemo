@@ -49,7 +49,7 @@ import static android.bluetooth.le.ScanSettings.SCAN_MODE_LOW_LATENCY;
 //This is the Ble tab, used to scan and find BLE devices during developing period
 public class MainTabScanFragment extends Fragment  implements HandleNotify{
     private static final String TAG = "MainTabScanFragment";
-    private static int OFFSET=0,MODELOFFSET=-7,POCKETOFFSET=-5;
+    private static int OFFSET=-7,MODELOFFSET=-7,POCKETOFFSET=-5;
     //Bluetooth
     private BluetoothManager mbluetoothManager;
     private BluetoothAdapter mbluetoothAdapter;
@@ -73,7 +73,8 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     Thread writeThread,zoneRecognizeThread, motionRecognizeThread;
 
     // prediction
-    PredictionTF_zone0522 preTF_zone;
+   // PredictionTF_zone0522 preTF_zone;
+    PredictionTF_distance0711 preTF_zone;
     Prediction_dynamicRSSI preDynamic;
     PredictionTF_motion preTF_motion;
     PredictionTF_xy preTF_xy;
@@ -173,7 +174,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
 
         // init layout components
         preDynamic=new Prediction_dynamicRSSI();
-        preTF_zone=new PredictionTF_zone0522(this.getContext().getAssets());
+        preTF_zone=new PredictionTF_distance0711(this.getContext().getAssets());
         preTF_motion=new PredictionTF_motion(this.getContext().getAssets());
         preTF_xy=new PredictionTF_xy(this.getContext().getAssets());
         txt_RSSI=getActivity().findViewById(R.id.txt_RSSI);
@@ -209,7 +210,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                         motionRecognizeThread = new Thread(runnableMotionRecognize);
                         zoneRecognizeThread = new Thread(runnableZoneRecognize);
                         motionRecognizeThread.start();
-                        //zoneRecognizeThread.start();
+                        zoneRecognizeThread.start();
                     } else {
                         exit = true;
                         toConnect = false;
@@ -440,7 +441,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
 
     private Runnable runnableZoneRecognize=new Runnable() {
         public void run() {
-            while(isConnect) { //连接后开始定位
+            while(toConnect) { //连接后开始定位
                 curZone=6; //状态为连接态
                 initNode();
                 if (awakeState == 0) {//判断是否唤醒节点
@@ -457,8 +458,8 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                     // 2. perform Lookup table
                     preTF_xy.Storage(Nodes);
                     float []a = preTF_xy.getPredict();
-                    curX=(int)a[0]*800;
-                    curY=(int)a[1]*800;
+                    curX=(int)(a[0]*800);
+                    curY=(int)(a[1]*800);
                     switch (DECISIONTYPE) {
                         case 1:
                             float[] outputs = new float[1];
@@ -482,7 +483,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                             }
                             outputs[0] = (float) distanceFilter.FilteredRSSI(outputs[0], true);
 
-                            distance = outputs[0];
+                            distance = outputs[0]*5;
                             if (distance < (float) MainTabLocationFragment.unlockDis / 10)
                                 curZone = 1;
                             else if (distance > (float) MainTabLocationFragment.lockDis / 10)
@@ -510,13 +511,13 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 trend=preDynamic.getTrend(Nodes);
                 //trend=(int)(a*500);
                 Log.d("dynamic",dynamic+" ");
-
+                Log.d("curzone",curZone+"  ");
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
+           }
         }
     };
 
@@ -538,6 +539,21 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
             int counter_motion=0;
 
             while(toConnect ) {
+                if (gyroValue == null) gyroValue = new float[3];
+                if (gravityValue == null) gravityValue = new float[3];
+                if (linearAccValue == null) linearAccValue = new float[3];
+                //pocket detect
+                if (PocketDetector.inPocket(gravityValue, distanceValue, light))
+                {
+                    curPocketState = 1;
+                    Log.d("pocket","in pocket");
+                    OFFSET=MODELOFFSET+POCKETOFFSET;
+                }
+                else {
+                    curPocketState = 0;
+                    OFFSET=MODELOFFSET;
+                }
+
                 if(curZone>=2 || curZone==-1){// perform motion detect if the phone is outside the unlock zone
                     // init sensor values
 
@@ -557,20 +573,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                     preTF_motion.clearAll();
                     curMotion=0;
                 }
-                if (gyroValue == null) gyroValue = new float[3];
-                if (gravityValue == null) gravityValue = new float[3];
-                if (linearAccValue == null) linearAccValue = new float[3];
-                //pocket detect
-                if (PocketDetector.inPocket(gravityValue, distanceValue, light))
-                {
-                    curPocketState = 1;
-                    Log.d("pocket","in pocket");
-                    OFFSET=MODELOFFSET+POCKETOFFSET;
-                }
-                else {
-                    curPocketState = 0;
-                   OFFSET=MODELOFFSET;
-                }
+
                 if (MOTIONEABLE==0){
                     curMotion=2;
                 }

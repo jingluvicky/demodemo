@@ -65,10 +65,6 @@ public class MainTabLocationoutputFragment extends Fragment {
         final Switch switch_record=getActivity().findViewById(R.id.switch_record);
         final Intent bindIntent = new Intent(getActivity(), DataService.class);
 
-        Intent startIntent = new Intent(getActivity(), DataService.class);
-        getActivity().startService(startIntent);
-
-        getActivity().bindService(bindIntent, connection, getActivity().BIND_AUTO_CREATE);
 
 
 

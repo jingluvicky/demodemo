@@ -205,7 +205,7 @@ public class MainTabLocationFragment extends Fragment {
                     //功能图标变换
                     //region
                     int walk = MainTabScanFragment.curMotion;
-                    int curzone = MainTabScanFragment.curZone;
+                    int curzone = MainTabScanFragment.curZoneDebounced;
                     int curLeftRight = MainTabScanFragment.curLeftRight;
                     int pocketState = MainTabScanFragment.curPocketState;
                     int dynamic = MainTabScanFragment.dynamic;
@@ -325,9 +325,9 @@ public class MainTabLocationFragment extends Fragment {
                         //endregion
                     }
                 }
-                mHandler.postDelayed(this,20);
+                mHandler.postDelayed(this,100);
             }
-        }, 20);
+        }, 100);
 
         super.onActivityCreated(savedInstanceState);
 

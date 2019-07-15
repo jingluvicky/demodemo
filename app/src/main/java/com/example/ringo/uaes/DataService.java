@@ -340,7 +340,7 @@ public float walk;
 			gravityValues[0]=event.values[0];
 			gravityValues[1]=event.values[1];
 			gravityValues[2]=event.values[2];
-			Log.d("gravity",gravityValues[0]+"  "+gravityValues[1]+" "+gravityValues[2]);
+			//Log.d("gravity",gravityValues[0]+"  "+gravityValues[1]+" "+gravityValues[2]);
 			MainTabScanFragment.gravityValue=gravityValues;
 			for(int i=FILTERWND-1;i>0;i--)
 			{
@@ -365,7 +365,7 @@ public float walk;
 			float pitch = (float)Math.toDegrees(values[1]);
 			float roll = (float)Math.toDegrees(values[2]);
 
-			Log.d("rollyawpitch","Azimuth：" + (int)azimuth + "\tPitch：" + (int)pitch + "\tRoll：" + (int)roll);
+			//Log.d("rollyawpitch","Azimuth：" + (int)azimuth + "\tPitch：" + (int)pitch + "\tRoll：" + (int)roll);
 
 			yaw = (float) azimuth;
 			pitch = (float) pitch;
@@ -403,10 +403,10 @@ public float walk;
 			sx=sx+vx*20/1000;
 			sy=sy+vy*20/1000;
 			sz=sz+vz*20/1000;
-			Log.d("acc","X= "+(int)aX+"  Y="+(int)aY+"  Z="+(int)aZ);
-			Log.d("Velocity","X= "+(int)vx+"  Y="+(int)vy+"  Z="+(int)vz);
+			//Log.d("acc","X= "+(int)aX+"  Y="+(int)aY+"  Z="+(int)aZ);
+			//Log.d("Velocity","X= "+(int)vx+"  Y="+(int)vy+"  Z="+(int)vz);
 
-			Log.d("distance","X= "+(int)sx+"  Y="+(int)sy+"  Z="+(int)sz);
+			//Log.d("distance","X= "+(int)sx+"  Y="+(int)sy+"  Z="+(int)sz);
 
 
 			s = "3";
