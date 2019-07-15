@@ -22,17 +22,6 @@ public class PredictionTF_xy {
     private static final String outputName = "output_0";
     private static final String modePath="file:///android_asset/LSTM_0712_polar.pb";
     TensorFlowInferenceInterface inferenceInterface;
-    double A=1;
-    double Q=0.05;
-    //double Q=0.005;
-    double H=1;
-    double R=3^2/100;
-    double B=0;
-    double U=0;
-    double x=0;
-    double P;
-    double K;
-    double z;
 
     private float[][]storage=new float[WINDOW][SENSORNUMBER];
     static {
@@ -83,8 +72,8 @@ public class PredictionTF_xy {
         inferenceInterface.fetch(outputName, outputs);
         Log.d("trend11",outputs[0]+" ");
         float []output=new float[2];
-        output[0]=(float)(outputs[0]*Math.cos(outputs[1])*10);
-        output[1]=(float)(outputs[0]*Math.sin(outputs[1])*10);
+        output[0]=(float)(outputs[0]*Math.cos(outputs[1])*1000);
+        output[1]=(float)(outputs[0]*Math.sin(outputs[1]*3.14)*1000);
         return output;
     }
 
@@ -95,7 +84,7 @@ public class PredictionTF_xy {
                 storage[i][j]=storage[i+1][j];
         }
         for(int i=0;i<7;i++){
-            storage[WINDOW-1][i]=(float)nodes[i].RSSI_filtered/100;
+            storage[WINDOW-1][i]=(float)(nodes[i].RSSI_filtered-30)/70;
         }
 
 
