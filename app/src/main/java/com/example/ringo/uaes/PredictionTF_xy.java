@@ -44,16 +44,8 @@ public class PredictionTF_xy {
      * @return 返回预测结果，int数组
      */
     public float []getPredict() {
-        //  float[] inputdata = bitmapToFloatArray(bitmap,128,1);//需要将图片缩放带28*28
-        //float[][] inputdata1=new float [128][1];
-        //inputdata1[1]
 
         float[]inputdata2=new float[WINDOW*SENSORNUMBER];
-       /* for (int i=0;i<9;i++){
-            for (int j=0;j<128;j++){
-                inputdata2[i*128+j]=storage[j][i];
-            }
-        }*/
 
         for (int j=0;j<WINDOW;j++){
             for (int i=0;i<SENSORNUMBER;i++){

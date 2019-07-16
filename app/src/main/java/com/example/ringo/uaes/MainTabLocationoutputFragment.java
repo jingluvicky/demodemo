@@ -66,15 +66,13 @@ public class MainTabLocationoutputFragment extends Fragment {
         final Intent bindIntent = new Intent(getActivity(), DataService.class);
 
 
-
-
         mHandler=new Handler();
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 {
-                    X=MainTabScanFragment.curX;
-                    Y=MainTabScanFragment.curY;
+                    X=0;//MainTabScanFragment.curX;
+                    Y=0;//MainTabScanFragment.curY;
                     View circleview=getActivity().findViewById(R.id.circle);
                     circleview.invalidate();
                 }

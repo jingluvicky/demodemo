@@ -49,7 +49,7 @@ import static android.bluetooth.le.ScanSettings.SCAN_MODE_LOW_LATENCY;
 //This is the Ble tab, used to scan and find BLE devices during developing period
 public class MainTabScanFragment extends Fragment  implements HandleNotify{
     private static final String TAG = "MainTabScanFragment";
-    private static int OFFSET=-7,MODELOFFSET=-7,POCKETOFFSET=-5;
+    private static int OFFSET=0,MODELOFFSET=-7;
     //Bluetooth
     private BluetoothManager mbluetoothManager;
     private BluetoothAdapter mbluetoothAdapter;
@@ -96,7 +96,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     public KalmanFilter_A_max[] Kalman = new KalmanFilter_A_max[13];
     public KalmanFilter_distance distanceFilter=new KalmanFilter_distance();
     public KalmanFilter Kalman_main = new KalmanFilter();
-    public static int curMotion=255,curZone=255,curZoneDebounced,curLeftRight=255,curPocketState,dynamic=0,trend=0,awakeState=0,curX=0,curY=0;
+    public static int curMotion=255,curZone=255,curZoneDebounced,curLeftRight=255,curPocketState=0,dynamic=0,trend=0,awakeState=0,curX=0,curY=0;
     public static float[] curMotionOutput;
     public int CMDCounter,CMDValue,
             DECISIONTYPE,MOTIONEABLE,
@@ -456,23 +456,19 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                     //region  利用定位算法判断位置
                     // 1. perform the tensorflow model
                     // 2. perform Lookup table
-                    preTF_xy.Storage(Nodes);
-                    float []a = preTF_xy.getPredict();
-                    curX=(int)(a[0]*800);
-                    curY=(int)(a[1]*800);
+                    //preTF_xy.Storage(Nodes);
+                    //float []a = preTF_xy.getPredict();
+                    //curX=(int)(a[0]);
+                    //curY=(int)(a[1]);
                     switch (DECISIONTYPE) {
                         case 1:
                             float[] outputs = new float[1];
                             switch (CARCONFIGTYPE) {
                                 case 1:
-                                    preTF_zone.Storage(Nodes);
+                                    preTF_zone.Storage(Nodes,curPocketState);
                                     outputs = preTF_zone.getPredict();
                                     if (distanceFilter == null)
                                         distanceFilter = new KalmanFilter_distance();
-
-                                    break;
-                                case 2:
-
 
                                     break;
 
@@ -490,16 +486,12 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                                 curZone = 3;
                             else curZone = 2;
                             if (Nodes[0].RSSI_filtered < 60) curZone = 1;
-                            int temp = luTpredictionTop.PEPS_s32CaliFunction(Nodes);
-                            if (temp == 0)
-                                curZone = 0;
+                            int temp = luTpredictionTop.PEPS_s32CaliFunction(Nodes,curPocketState);
+                            if (temp == 0) curZone = 0;
                             break;
                         case 2:
-                            switch (CARCONFIGTYPE) {
-                                case (1):
 
-                            }
-                            curZone = luTpredictionTop.PEPS_s32CaliFunction(Nodes);
+                            curZone = luTpredictionTop.PEPS_s32CaliFunction(Nodes,curPocketState);
                             break;
                     }
                     //endregion
@@ -507,8 +499,8 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 curZoneDebounced=zoneDebounce.DebouncedZone(curZone);
                 preDynamic.Storage(Nodes);
 
-                dynamic=preDynamic.getPredict();
-                trend=preDynamic.getTrend(Nodes);
+                //dynamic=preDynamic.getPredict();
+                //trend=preDynamic.getTrend(Nodes);
                 //trend=(int)(a*500);
                 Log.d("dynamic",dynamic+" ");
                 Log.d("curzone",curZone+"  ");
@@ -547,7 +539,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 {
                     curPocketState = 1;
                     Log.d("pocket","in pocket");
-                    OFFSET=MODELOFFSET+POCKETOFFSET;
+                    OFFSET=MODELOFFSET;
                 }
                 else {
                     curPocketState = 0;
