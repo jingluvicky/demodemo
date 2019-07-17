@@ -33,7 +33,7 @@
 
             android:id="@+id/zoneimage"
             android:layout_width="0dp"
-            android:layout_height="300dp"
+            android:layout_height="270dp"
 
 
             android:layout_weight="1.7"
@@ -126,13 +126,15 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="park" />
+                    android:text="park"
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/img_zone4"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:visibility="invisible"
                     app:srcCompat="@mipmap/grayicon" />
             </LinearLayout>
 
@@ -147,13 +149,15 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="awake" />
+                    android:text="awake"
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/img_zone5"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:visibility="invisible"
                     app:srcCompat="@mipmap/grayicon" />
             </LinearLayout>
 
@@ -168,13 +172,15 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="@string/menu_connect" />
+                    android:text="@string/menu_connect"
+                    android:visibility="invisible" />
 
                 <ImageView
                     android:id="@+id/img_zone6"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:visibility="invisible"
                     app:srcCompat="@mipmap/grayicon" />
             </LinearLayout>
         </LinearLayout>
@@ -263,6 +269,13 @@
             android:layout_weight="1"
             android:text="record" />
 
+        <Switch
+            android:id="@+id/switch_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Switch" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -275,28 +288,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Left" />
+            android:text="Left"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/btn_uwbfront"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Front" />
+            android:text="Front"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/btn_uwbright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Right" />
+            android:text="Right"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/btn_uwbrear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Rear" />
+            android:text="Rear"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout
@@ -372,7 +389,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:visibility="invisible" />
 
     <!--<LinearLayout
         android:layout_width="match_parent"

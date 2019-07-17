@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="ZONEBUFFER">5</integer>  <!--duration before zone switch-->
-    <integer name="DECISIONTYPE">2</integer>  <!-- 1: tensorflow 2: lookup table-->
+    <integer name="ZONEBUFFER">1</integer>  <!--duration before zone switch-->
+    <integer name="DECISIONTYPE">1</integer>  <!-- 1: tensorflow 2: lookup table-->
     <integer name="CARCONFIGTYPE">1</integer>  <!-- 1: TOP 2: MEDIUM-->
 
     <integer name="DEBOUNCEDBUFFER1to3">20</integer>  <!--duration before lock state switch-->

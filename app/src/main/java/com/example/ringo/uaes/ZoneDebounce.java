@@ -17,8 +17,8 @@ public class ZoneDebounce {
     private int ZONEBUFFERNUMBER=5,
 
     DEBOUNCEBUFFERMATRIX[][]={
-            {0,5,0,40,0,0,0},
-            {0,0,0,20,0,0,0},
+            {0,5,0,10,0,0,0},
+            {0,0,0,10,0,0,0},
             {0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0},

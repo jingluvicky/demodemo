@@ -20,7 +20,7 @@ public class PredictionTF_zone0522{
     private static final String inputName = "x_input";
     //模型中输出变量的名称
     private static final String outputName = "output";
-    private static final String modePath="file:///android_asset/190522_nnUWB_80_normalized_7rssi.pb";
+    private static final String modePath="file:///android_asset/190711_top_nio_distance_fullyconnect.pb";
     TensorFlowInferenceInterface inferenceInterface;
 
 
@@ -73,19 +73,27 @@ public class PredictionTF_zone0522{
     public void TFclose(){
         inferenceInterface.close();
     }
-    public void Storage(Node[] Nodes){
+    public void Storage(Node[] Nodes,int curPocketstate){
+        for (int i=0;i<WINDOW-1;i++){
+            for(int j=0;j<SensorNumber;j++)
+                storage[i][j]=storage[i+1][j];
+
+
+        }
         // main,min,std,mean,diff16,sum12
-        //float[]rssiMax={82,96,97,97,91,93,92};
-        //float[]rssiMin={48,44,41,44,35,39,43};
-        //for(int j=0;j<7;j++){
-        //    Nodes[j].RSSI_filtered=(Nodes[j].RSSI_filtered-rssiMin[j])/(rssiMax[j]-rssiMin[j]);
-        //}
+        float[]rssiMax={86,86,84,86,86,86,85};
+        float[]rssiMin={45,33,39,38,35,37,36};
+        float[]arrNode=new float[7];
+        for(int j=0;j<7;j++){
+            arrNode[j]=(float)(Nodes[j].RSSI_filtered-curPocketstate*3-rssiMin[j])/(rssiMax[j]-rssiMin[j]);
+        }
+
         int Window=WINDOW;
-        storage[WINDOW-1][0]=(float)Nodes[0].RSSI_filtered;
+        storage[WINDOW-1][0]=arrNode[0];
         //find maximum value of anchor
         float []arr=new float[6];
         for (int i=0;i<6;i++){
-            arr[i]=(float)(Nodes[i+1].RSSI_filtered);
+            arr[i]=(float)arrNode[i+1];
         }
 
         //float[]arr={91,88,59,84,76,78};
@@ -98,8 +106,9 @@ public class PredictionTF_zone0522{
         storage[WINDOW-1][6]=arr_sort[0]+arr_sort[1];
         storage[WINDOW-1][7]=arr_sort[0]+arr_sort[1]+arr_sort[2];
         // normalization
-        float[] paraMax={89,79,80,(float)20.65,(float)83.16,60,158,240};
-        float[] paraMin={55,27,44,(float)1.1547,(float)62.5,3,79,148};
+
+        float[] paraMax={1,(float)0.679,(float)0.849,(float)0.352,(float)0.822,(float)0.957,(float)1.417,(float)2.25};
+        float[] paraMin={0,0,(float)0.146,(float)0.050,(float)0.503,(float)0.152,(float)0.204,(float)0.826};
         for (int i=0;i<SensorNumber;i++){
             storage[WINDOW-1][i]=(storage[WINDOW-1][i]-paraMin[i])/(paraMax[i]-paraMin[i]);
         }

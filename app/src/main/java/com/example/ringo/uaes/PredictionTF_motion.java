@@ -62,7 +62,7 @@ public class PredictionTF_motion {
             }
         }
         float[] outputs = new float[3];
-        if (storage[50][0]!=0) {
+        if (storage[10][0]!=0) {
             //将数据feed给tensorflow的输入节点
             inferenceInterface.feed(inputName, inputdata2, 1, WINDOW, SENSORNUMBER);
             //运行tensorflow

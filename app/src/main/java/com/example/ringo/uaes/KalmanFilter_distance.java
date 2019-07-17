@@ -2,7 +2,7 @@ package com.example.ringo.uaes;
 
 public class KalmanFilter_distance {
     double A=1;
-    double Q=0.05;
+    double Q=0.1;
     //double Q=0.005;
     double H=1;
     double R=3^2/100;

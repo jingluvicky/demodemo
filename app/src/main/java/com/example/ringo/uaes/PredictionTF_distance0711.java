@@ -83,7 +83,7 @@ public class PredictionTF_distance0711 {
                 storage[i][j]=storage[i+1][j];
         }
         for(int i=0;i<7;i++){
-            storage[WINDOW-1][i]=(float)(nodes[i].RSSI_filtered-pocketState*5)/100;
+            storage[WINDOW-1][i]=(float)(nodes[i].RSSI_filtered-pocketState*3)/100;
         }
 
 

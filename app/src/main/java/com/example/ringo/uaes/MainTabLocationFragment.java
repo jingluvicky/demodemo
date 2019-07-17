@@ -70,8 +70,9 @@ public class MainTabLocationFragment extends Fragment {
 
             //       final Button btn_rearPocket=(Button)getActivity().findViewById(R.id.btn_rearPocket);
             //     final Button btn_frontPocket=(Button)getActivity().findViewById(R.id.btn_frontPocket);
-            //   final Button btn_inHand=(Button)getActivity().findViewById(R.id.btn_hand);
+            //   final But;ton btn_inHand=(Button)getActivity().findViewById(R.id.btn_hand);
             final Switch switch_record = getActivity().findViewById(R.id.switch_record);
+            final Switch switch_type=getActivity().findViewById(R.id.switch_type);
             final Intent bindIntent = new Intent(getActivity(), DataService.class);
             btn_left = getActivity().findViewById(R.id.btn_uwbleft);
             btn_right = getActivity().findViewById(R.id.btn_uwbright);
@@ -84,7 +85,7 @@ public class MainTabLocationFragment extends Fragment {
             txt_lockdis = getActivity().findViewById(R.id.txt_lockDis);
             txt_unlockdis = getActivity().findViewById(R.id.txt_unlockDis);
             txt_zone = getActivity().findViewById(R.id.txt_zone);
-            txt_trend = getActivity().findViewById(R.id.txt_trend);
+           // txt_trend = getActivity().findViewById(R.id.txt_trend);
             btn_lockminus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -153,6 +154,19 @@ public class MainTabLocationFragment extends Fragment {
                     btn_front.setBackgroundColor(0);
                 }
             });
+
+            switch_type.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                // @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    //if has the authority
+                    if (isChecked) {
+                        MainTabScanFragment.decisiontype=1;
+                    }else{
+                        MainTabScanFragment.decisiontype=2;
+                    }
+
+                }
+            });
             for (int i = 0; i < switches.length; ++i) {
                 switches[i] = true;
             }
@@ -184,8 +198,8 @@ public class MainTabLocationFragment extends Fragment {
                 img_pocket = getActivity().findViewById(R.id.img_pocket);
                 img_connect = getActivity().findViewById(R.id.img_connectlocation);
                 img_lock = getActivity().findViewById(R.id.img_lock);
-                img_dynamic = getActivity().findViewById(R.id.img_dynamic);
-                img_trend = getActivity().findViewById(R.id.img_trend);
+               // img_dynamic = getActivity().findViewById(R.id.img_dynamic);
+               // img_trend = getActivity().findViewById(R.id.img_trend);
                 img_zone0 = getActivity().findViewById(R.id.img_zone0);
 
                 img_zone0 = getActivity().findViewById(R.id.img_zone0);
@@ -208,7 +222,7 @@ public class MainTabLocationFragment extends Fragment {
                     int curzone = MainTabScanFragment.curZoneDebounced;
                     int curLeftRight = MainTabScanFragment.curLeftRight;
                     int pocketState = MainTabScanFragment.curPocketState;
-                    int dynamic = MainTabScanFragment.dynamic;
+                    //int dynamic = MainTabScanFragment.dynamic;
                     // TextView txt_curzone1=getActivity().findViewById(R.id.txt_curzone1);
                     //txt_curzone1.setText("curZone: "+zone);
                     if (pocketState == 1) {
@@ -260,7 +274,7 @@ public class MainTabLocationFragment extends Fragment {
                         if (zone_temp == 3 && walk == 2 && MainTabScanFragment.dynamic == 0) {
                             img_lock.setImageResource(R.mipmap.redicon2);
                         }
-                        if (dynamic == 1) {
+                       /* if (dynamic == 1) {
                             img_dynamic.setImageResource(R.mipmap.greenicon);
                         } else {
                             img_dynamic.setImageResource(R.mipmap.redicon2);
@@ -270,7 +284,7 @@ public class MainTabLocationFragment extends Fragment {
                         } else {
                             img_trend.setImageResource(R.mipmap.greenicon);
                         }
-                        txt_trend.setText(MainTabScanFragment.trend + " ");
+                        txt_trend.setText(MainTabScanFragment.trend + " ");*/
                     }
                     txt_zone.setText("Current Zone:" + MainTabScanFragment.distance + "\n" + MainTabScanFragment.curZone + "\n" + MainTabScanFragment.curZoneDebounced);
                 //endregion

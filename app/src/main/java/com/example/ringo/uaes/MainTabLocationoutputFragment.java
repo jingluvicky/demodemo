@@ -67,18 +67,18 @@ public class MainTabLocationoutputFragment extends Fragment {
 
 
         mHandler=new Handler();
-        mHandler.postDelayed(new Runnable() {
+     /*   mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 {
-                    X=0;//MainTabScanFragment.curX;
-                    Y=0;//MainTabScanFragment.curY;
+                    X=MainTabScanFragment.curX;
+                    Y=MainTabScanFragment.curY;
                     View circleview=getActivity().findViewById(R.id.circle);
                     circleview.invalidate();
                 }
                 mHandler.postDelayed(this,20);
             }
-        }, 20);
+        }, 20);*/
         super.onActivityCreated(savedInstanceState);
 
     }

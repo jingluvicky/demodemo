@@ -49,7 +49,7 @@ import static android.bluetooth.le.ScanSettings.SCAN_MODE_LOW_LATENCY;
 //This is the Ble tab, used to scan and find BLE devices during developing period
 public class MainTabScanFragment extends Fragment  implements HandleNotify{
     private static final String TAG = "MainTabScanFragment";
-    private static int OFFSET=0,MODELOFFSET=-7;
+    private static int OFFSET=-7,MODELOFFSET=-7;
     //Bluetooth
     private BluetoothManager mbluetoothManager;
     private BluetoothAdapter mbluetoothAdapter;
@@ -75,6 +75,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     // prediction
    // PredictionTF_zone0522 preTF_zone;
     PredictionTF_distance0711 preTF_zone;
+    //PredictionTF_zone0522 preTF_zone;
     Prediction_dynamicRSSI preDynamic;
     PredictionTF_motion preTF_motion;
     PredictionTF_xy preTF_xy;
@@ -82,7 +83,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     ZoneDebounce zoneDebounce=new ZoneDebounce();
 
     // UI components
-    private Switch switch_connect;
+    private Switch switch_connect,switch_type;
     private TextView txt_RSSI;
     ImageView img_scan,img_connect;
     TextView txt_curMotion,txt_curZone;
@@ -96,7 +97,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
     public KalmanFilter_A_max[] Kalman = new KalmanFilter_A_max[13];
     public KalmanFilter_distance distanceFilter=new KalmanFilter_distance();
     public KalmanFilter Kalman_main = new KalmanFilter();
-    public static int curMotion=255,curZone=255,curZoneDebounced,curLeftRight=255,curPocketState=0,dynamic=0,trend=0,awakeState=0,curX=0,curY=0;
+    public static int curMotion=255,curZone=255,curZoneDebounced=6,curLeftRight=255,curPocketState=0,dynamic=0,trend=0,awakeState=0,curX=0,curY=0,decisiontype=2;
     public static float[] curMotionOutput;
     public int CMDCounter,CMDValue,
             DECISIONTYPE,MOTIONEABLE,
@@ -175,6 +176,8 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
         // init layout components
         preDynamic=new Prediction_dynamicRSSI();
         preTF_zone=new PredictionTF_distance0711(this.getContext().getAssets());
+        //preTF_zone=new PredictionTF_zone0522(this.getContext().getAssets());
+
         preTF_motion=new PredictionTF_motion(this.getContext().getAssets());
         preTF_xy=new PredictionTF_xy(this.getContext().getAssets());
         txt_RSSI=getActivity().findViewById(R.id.txt_RSSI);
@@ -183,6 +186,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
         img_scan=getActivity().findViewById(R.id.img_scan);
         img_connect=getActivity().findViewById(R.id.img_connect);
         switch_connect=getActivity().findViewById(R.id.Switch_connect);
+        switch_type=getActivity().findViewById(R.id.switch_type);
         DECISIONTYPE=getResources().getInteger(R.integer.DECISIONTYPE);
         ZONEBUFFERNUMBER=getResources().getInteger(R.integer.ZONEBUFFER);
         DEBOUNCEDBUFFER1to3=getResources().getInteger(R.integer.DEBOUNCEDBUFFER1to3);
@@ -191,6 +195,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
         CARCONFIGTYPE=getResources().getInteger(R.integer.CARCONFIGTYPE);
         MOTIONEABLE=getResources().getInteger(R.integer.MOTIONENABLE);
         //
+
         switch_connect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             // @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -222,6 +227,8 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                             curZone = 255;
                             curLeftRight = 255;
                         }
+
+
                         Log.d(TAG, "Disconnect");
                        // mbluetoothAdapter.getBluetoothLeAdvertiser().stopAdvertising(mAdvertiseCallback);
                         Log.d(TAG, "Stop advertising");
@@ -238,7 +245,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
             }
         });
     }
-
+//region 蓝牙设置
 
     private void InitBluetoothService(){
         mbluetoothManager = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
@@ -246,6 +253,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
         if (!mbluetoothAdapter.isEnabled())
         {
             startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),0);
+            Log.d(TAG,"oncreate:startactivity");
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Log.d(TAG, "onCreate: Request permission");
@@ -279,6 +287,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                         if(mBluetoothGattCharacNotify != null)
                         {
                             setCharacteristicNotification(mBluetoothGattCharacNotify, true);
+
                             //                    boolean isEnableNotification =  mbluetoothgatt.setCharacteristicNotification(mbluetoothgattcharacteristic, true);
                             //                   if(isEnableNotification)
                             {
@@ -328,6 +337,10 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                         {
                             isConnect=false;
                             mbluetoothgatt.close();
+                            mbluetoothgatt=null;
+                            mbluetoothAdapter=null;
+                            mbluetoothManager=null;
+                            InitBluetoothService();
                             // inte node for next connection
                             initNode();
 
@@ -367,7 +380,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(config_uuid);
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mbluetoothgatt.writeDescriptor(descriptor);
-
+            Log.w(TAG,"notify enable   "+characteristic.getUuid().toString());
 
         }
     }
@@ -438,12 +451,12 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
             }
         }
     };
-
+//endregion
     private Runnable runnableZoneRecognize=new Runnable() {
         public void run() {
             while(toConnect) { //连接后开始定位
                 curZone=6; //状态为连接态
-                initNode();
+               // initNode();
                 if (awakeState == 0) {//判断是否唤醒节点
                     if( Nodes[0].RSSI_filtered<80 ){
                         curZone=5;
@@ -456,11 +469,11 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                     //region  利用定位算法判断位置
                     // 1. perform the tensorflow model
                     // 2. perform Lookup table
-                    //preTF_xy.Storage(Nodes);
-                    //float []a = preTF_xy.getPredict();
-                    //curX=(int)(a[0]);
-                    //curY=(int)(a[1]);
-                    switch (DECISIONTYPE) {
+                  // preTF_xy.Storage(Nodes);
+                   // float []a = preTF_xy.getPredict();
+                    curX=1;//(int)(a[0]);
+                    curY=1;//e(int)(a[1]);
+                    switch (decisiontype) {
                         case 1:
                             float[] outputs = new float[1];
                             switch (CARCONFIGTYPE) {
@@ -488,16 +501,20 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                             if (Nodes[0].RSSI_filtered < 60) curZone = 1;
                             int temp = luTpredictionTop.PEPS_s32CaliFunction(Nodes,curPocketState);
                             if (temp == 0) curZone = 0;
+                            curZoneDebounced=curZone;
                             break;
                         case 2:
 
                             curZone = luTpredictionTop.PEPS_s32CaliFunction(Nodes,curPocketState);
+                            curZoneDebounced=zoneDebounce.DebouncedZone(curZone);
+
+
                             break;
                     }
                     //endregion
                 }
-                curZoneDebounced=zoneDebounce.DebouncedZone(curZone);
-                preDynamic.Storage(Nodes);
+              //  curZoneDebounced=zoneDebounce.DebouncedZone(curZone);
+               // preDynamic.Storage(Nodes);
 
                 //dynamic=preDynamic.getPredict();
                 //trend=preDynamic.getTrend(Nodes);
@@ -539,14 +556,13 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 {
                     curPocketState = 1;
                     Log.d("pocket","in pocket");
-                    OFFSET=MODELOFFSET;
+
                 }
                 else {
                     curPocketState = 0;
-                    OFFSET=MODELOFFSET;
                 }
 
-                if(curZone>=2 || curZone==-1){// perform motion detect if the phone is outside the unlock zone
+                if(curZone>=0 || curZone==-1){// perform motion detect if the phone is outside the unlock zone
                     // init sensor values
 
                     // motion detect
@@ -583,10 +599,13 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
         @Override
         public void run() {
             while(!exit){
+                //region 写数据传送给BNCM
+                if(mbluetoothgatt!=null){
                 if (mbluetoothgatt.readRemoteRssi()) {
                     if (Nodes[0]==null) Nodes[0]=new Node();
                     Nodes[0].RSSI = Math.abs(MainRSSI)+OFFSET;
                     Nodes[0].RSSI_filtered = Kalman_main.FilteredRSSI(Nodes[0].RSSI);
+                }
                 }
 
                 // create new byte array
@@ -609,7 +628,7 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                 // Command
                 I[0]=tempCMD;
                 // current Zone
-                I[1] = curZone;//curZone_filtered;
+                I[1] = curZoneDebounced;//curZone_filtered;
                 I[2] =curLeftRight;
                 I[3] = 0;
 
@@ -635,13 +654,16 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
                     atemp[i]=I[i].byteValue();// convert Integer to byte
                 }
                 // write the characteristic
-                mbluetoothgattcharacteristic.setValue(atemp);
-                mbluetoothgatt.writeCharacteristic(mbluetoothgattcharacteristic);
+                if(mbluetoothgatt!=null) {
+                    mbluetoothgattcharacteristic.setValue(atemp);
+                    mbluetoothgatt.writeCharacteristic(mbluetoothgattcharacteristic);
+                }
                 try{
                     Thread.sleep(50);
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }
+                //endregion
             }
         }
     };
@@ -668,28 +690,6 @@ public class MainTabScanFragment extends Fragment  implements HandleNotify{
             Nodes[i].RSSI_filtered=temp[0];
         }
 
-
-        //Byte 12 Validity assist RSSI 1-8
-       /* int validity_1=dataReceived[11];
-        for (int i=7;i>=0;i--){
-            if (validity_1>=Math.pow(2,i)){
-                Nodes[i+1].Validaty=true;
-                validity_1=validity_1-(int)Math.pow(2,i);
-
-            }else{
-                Nodes[i+1].Validaty=true;///////////////////////////****************************************************************
-
-            }
-        }
-        //Byte 13 Validity Assist RSSI 9-10
-        int validity_2=dataReceived[12];
-        for (int i=1;i>=0;i--){
-            if (validity_2>=Math.pow(2,i)){
-                Nodes[i+9].Validaty=true;
-                validity_2=validity_2-(int)Math.pow(2,i);
-            }else{Nodes[i+9].Validaty=true;}/////////////*********************************************************************************888
-        }
-*/
         if(Math.abs(Nodes[2].RSSI_filtered+Nodes[3].RSSI_filtered-Nodes[5].RSSI_filtered-Nodes[6].RSSI_filtered)>5) {
             if (Nodes[2].RSSI_filtered + Nodes[3].RSSI_filtered > Nodes[5].RSSI_filtered + Nodes[6].RSSI_filtered) {
                 curLeftRight = 0;

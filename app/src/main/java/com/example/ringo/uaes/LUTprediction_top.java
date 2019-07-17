@@ -189,7 +189,7 @@ public class LUTprediction_top {
     {
         int[]rssi=new int[PE_NODE_NUM];
         for (int i=0;i<PE_NODE_NUM;i++){
-            rssi[i]=(int)nodes[i].RSSI_filtered-pocketState*5;
+            rssi[i]=(int)nodes[i].RSSI_filtered-pocketState*3;
         }
         int index = PS_s32CaliFunction(rssi);
         int zone = -1;

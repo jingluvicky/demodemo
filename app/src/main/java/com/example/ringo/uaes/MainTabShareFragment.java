@@ -50,14 +50,24 @@ public class MainTabShareFragment extends Fragment implements HandleNotify{
         lv = (ListView)getActivity().findViewById(R.id.friend_list_1);
         lv.setAdapter(mFriendListAdpter);
         Contents a=new Contents();
+        if (!SPUtils.getBoolean("IS_OWNER"))
+        {
+
         a.sName="Chen Xiaoxiong";
         a.sTeleNumber="151 3847 3924";
-        Contents b=new Contents();
-        b.sName="Qiao Peihu";
-        b.sTeleNumber="151 3348 9989";
+       // Contents b=new Contents();
+        //b.sName="Qiao Peihu";
+       // b.sTeleNumber="151 3348 9989";
+        }else{
+            a.sName="Qiao Peihu";
+            a.sTeleNumber="136 3647 5375";
+            //Contents b=new Contents();
+           // b.sName="Qiao Peihu";
+           // b.sTeleNumber="151 3348 9989";
+        }
 
         mFriendListAdpter.addContent(a);
-        mFriendListAdpter.addContent(b);
+       // mFriendListAdpter.addContent(b);
         mFriendListAdpter.notifyDataSetChanged();
         lv.setOnItemClickListener(new MyOnItemClickListener());
 
@@ -323,26 +333,33 @@ public class MainTabShareFragment extends Fragment implements HandleNotify{
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             //如果缓存convertView为空，则需要创建View
-            if(convertView == null)
-            {
+            if (convertView == null) {
                 holder = new ViewHolder();
                 //根据自定义的Item布局加载布局
                 convertView = mInflater.inflate(R.layout.friend_list, null);
-                holder.iPhoto = (ImageView)convertView.findViewById(R.id.photoicon);
-                holder.tname = (TextView)convertView.findViewById(R.id.user_name);
-                holder.info = (TextView)convertView.findViewById(R.id.tel_number);
-                holder.iShare = (ImageView)convertView.findViewById(R.id.shareico);
+                holder.iPhoto = (ImageView) convertView.findViewById(R.id.photoicon);
+                holder.tname = (TextView) convertView.findViewById(R.id.user_name);
+                holder.info = (TextView) convertView.findViewById(R.id.tel_number);
+                holder.iShare = (ImageView) convertView.findViewById(R.id.shareico);
                 //将设置好的布局保存到缓存中，并将其设置在Tag里，以便后面方便取出Tag
                 convertView.setTag(holder);
-            }else
-            {
-                holder = (ViewHolder)convertView.getTag();
+            } else {
+                holder = (ViewHolder) convertView.getTag();
             }
-            if(position==0) {
-                holder.iPhoto.setImageResource(R.mipmap.xiaoxiong);
-            }else{
-            holder.iPhoto.setImageResource(R.mipmap.kobe);}
-
+            if (!SPUtils.getBoolean("IS_OWNER"))
+            {
+                if (position == 0) {
+                    holder.iPhoto.setImageResource(R.mipmap.roy);
+                } else {
+                    holder.iPhoto.setImageResource(R.mipmap.kobe);
+                }
+             }else{
+                if (position == 0) {
+                    holder.iPhoto.setImageResource(R.mipmap.kobe2);
+                } else {
+                    holder.iPhoto.setImageResource(R.mipmap.roy);
+                }
+            }
             holder.tname.setText(friendContentList.get(position).sName);
             holder.info.setText(friendContentList.get(position).sTeleNumber);
             holder.iShare.setSelected(false);
